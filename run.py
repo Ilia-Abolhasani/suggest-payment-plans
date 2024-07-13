@@ -1,9 +1,8 @@
 import math
 import random
-import itertools
-from datetime import datetime, timedelta
 import jdatetime
-from typing import Union, List
+
+# from typing import Union, List
 
 from src.suggest import suggest_payment_plans
 
@@ -80,8 +79,8 @@ if __name__ == "__main__":
         start_date_day=20,
         total=100.0,
         cash_amount=20.0,
-        number_of_month=5,
-        check_number=5,
+        number_of_month=3,
+        check_number=3,
         max_discount_percentage=0.2,
         max_raas_days=65,
         max_price_change=3,

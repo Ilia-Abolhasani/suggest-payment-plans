@@ -39,7 +39,7 @@ def suggest_payment_plans(
         check_date = None
         for j in range(raas_days.shape[1]):
             rass = raas_days[i, j]
-            if rass <= config.max_raas_days and rass >= 65:
+            if rass <= config.max_raas_days:  # and rass >= 65:
                 discount = get_discount(rass, config) / 100
                 total_after_discount = total * (1 - discount)
                 suggestion_price = pricess[j, :]  # todo* (1 - discount)
