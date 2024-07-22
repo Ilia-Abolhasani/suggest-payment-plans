@@ -1,3 +1,5 @@
+import sys
+import json
 import math
 import random
 import jdatetime
@@ -72,7 +74,12 @@ def disp(plan):
         print((formatted_date, check[1]))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
+    input_json = sys.stdin.read()
+    input_data = json.loads(input_json)
+    output_data = run(**input_data)
+    print(json.dumps(output_data, default=str))
+    """
     suggested_plan = run(
         start_date_year=1403,
         start_date_month=8,
@@ -96,3 +103,4 @@ if __name__ == "__main__":
         print()
         print("===============================================")
         print()
+    """
