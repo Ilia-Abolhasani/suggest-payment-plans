@@ -33,7 +33,8 @@ def suggest_payment_plans(
         non_zero[i, :] = p[p != 0]
 
     pricess = np.array(pricess)
-    raas_days = (np.dot(non_zero, pricess.T) / 100).round()
+    price_sum = pricess.T.sum(axis=0)
+    raas_days = (np.dot(non_zero, pricess.T) / price_sum).round()
     valid_plans = []
     for i in range(raas_days.shape[0]):
         check_date = None
