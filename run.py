@@ -51,11 +51,16 @@ def run(
         {
             "max_discount_percentage": max_discount_percentage,
             "max_raas_days": max_raas_days,
+            "min_raas_days": max_raas_days * 0.6,
             "max_price_change": max_price_change,
             "number_of_generated_pricess": number_of_generated_pricess,
             "start_shift_days": 20,
             "acceptable_days": [5, 10, 15, 20, 25, 30],
             "number_of_months": number_of_month,
+            "max_answer": 100,
+            "w_balance": 0.35,
+            "w_duration": 0.3,
+            "w_raas_days": 0.35,
         }
     )
     # Call function
