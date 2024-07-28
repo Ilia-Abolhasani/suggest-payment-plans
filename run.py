@@ -55,6 +55,7 @@ def run(
             "number_of_generated_pricess": number_of_generated_pricess,
             "start_shift_days": 20,
             "acceptable_days": [5, 10, 15, 20, 25, 30],
+            "number_of_months": number_of_month,
         }
     )
     # Call function

@@ -6,9 +6,15 @@ from src.plan import get_plans
 from src.price_variations import generate_price_variations
 
 
-def score(raas_days, combination):
-    w_balance = 0.5
-    w_raas_days = 0.5
+def score(row, config):
+    w_balance = 0.35
+    w_duration = 0.3
+    w_raas_days = 0.35
+
+    raas_days = row["raas_days"] / config.max_raas_days
+    combination = row["checks_days"]
+    duration = combination[-1] / (config.number_of_months * 30)
+
     # balance score
     if len(combination) < 2:
         return 0
@@ -17,7 +23,12 @@ def score(raas_days, combination):
         diffs[i] -= diffs[i - 1]
     variance = np.var(diffs)
     balance_score = 1 / (1 + variance)
-    return w_balance * balance_score + w_raas_days * raas_days
+    s = w_balance * balance_score
+    #
+
+    s += w_duration * duration
+    s += w_raas_days * raas_days
+    return s
 
 
 def suggest_payment_plans(
@@ -70,9 +81,5 @@ def suggest_payment_plans(
                     "checks_days": non_zero[i, :],
                 }
                 valid_plans.append(plan)
-    sorted_plans = sorted(
-        valid_plans,
-        key=lambda x: score(x["raas_days"] / config.max_raas_days, x["checks_days"]),
-        reverse=True,
-    )
+    sorted_plans = sorted(valid_plans, key=lambda x: score(x, config), reverse=True)
     return sorted_plans
