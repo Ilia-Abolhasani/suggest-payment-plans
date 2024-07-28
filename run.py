@@ -58,7 +58,7 @@ def run(
         }
     )
     # Call function
-    start_date = jdatetime.date(1403, 4, 1)
+    start_date = jdatetime.date(start_date_year, start_date_month, start_date_day)
 
     suggested_plan = suggest_payment_plans(
         start_date, total, cash_amount, check_number, number_of_month, config
@@ -74,7 +74,7 @@ def disp(plan):
         print((formatted_date, check[1]))
 
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     input_json = sys.stdin.read()
     input_data = json.loads(input_json)
     output_data = run(**input_data)
