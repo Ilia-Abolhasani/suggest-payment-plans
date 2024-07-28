@@ -6,6 +6,20 @@ from src.plan import get_plans
 from src.price_variations import generate_price_variations
 
 
+def score(raas_days, combination):
+    w_balance = 0.5
+    w_raas_days = 0.5
+    # balance score
+    if len(combination) < 2:
+        return 0
+    diffs = combination.copy()
+    for i in range(len(diffs) - 1, 0, -1):
+        diffs[i] -= diffs[i - 1]
+    variance = np.var(diffs)
+    balance_score = 1 / (1 + variance)
+    return w_balance * balance_score + w_raas_days * raas_days
+
+
 def suggest_payment_plans(
     start_date, total, cash_amount, check_number, number_of_months, config
 ):
@@ -33,8 +47,7 @@ def suggest_payment_plans(
         non_zero[i, :] = p[p != 0]
 
     pricess = np.array(pricess)
-    price_sum = pricess.T.sum(axis=0)
-    raas_days = (np.dot(non_zero, pricess.T) / price_sum).round()
+    raas_days = (np.dot(non_zero, pricess.T) / total).round()
     valid_plans = []
     for i in range(raas_days.shape[0]):
         check_date = None
@@ -54,7 +67,12 @@ def suggest_payment_plans(
                     "discount": discount,
                     "checks": check_dates,
                     "raas_days": rass,
+                    "checks_days": non_zero[i, :],
                 }
                 valid_plans.append(plan)
-    sorted_plans = sorted(valid_plans, key=lambda x: x["raas_days"], reverse=True)
+    sorted_plans = sorted(
+        valid_plans,
+        key=lambda x: score(x["raas_days"] / config.max_raas_days, x["checks_days"]),
+        reverse=True,
+    )
     return sorted_plans
